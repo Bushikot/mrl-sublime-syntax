@@ -1,0 +1,125 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - mrl
+  
+scope: source.mrl
+
+contexts:
+  # The prototype context is prepended to all contexts but those setting
+  # meta_include_prototype: false.
+  prototype:
+    - include: comments
+
+  main:
+    # The main context is the initial starting point of our syntax.
+    # Include other contexts from here (or specify them directly).
+    - include: keywords
+    - include: rule_types
+    - include: functions
+    - include: numbers
+    - include: strings
+    - include: strings2
+    - include: constants
+    - include: specialchars
+    - include: conditionals
+    - include: logical
+    - include: punctuation
+    - include: assignment
+    - include: arithmetic
+
+  arithmetic:
+    - match: '\+|-'
+      scope: keyword.operator.arithmetic.mrl
+
+  assignment:
+    - match: '='
+      scope: keyword.operator.assignment.mrl
+
+  # punctuation:
+  #   - match: '.'
+  #     scope: punctuation.separator.mrl
+
+  specialchars:
+    - match: ':|;|,'
+      scope: keyword.control.mrl
+
+  conditionals:
+    - match: '>|<|<=|>=|==|!=|equals|not_equals|smaller_than|less_than|smaller_or_equals|less_or_equals|greater_than|greater_or_equals|between|within|outside|contains|contained_in|contains_one_of|has_prefix|has_suffix|matches'
+      scope: keyword.control.conditional.mrl
+
+  logical:
+    - match: '\b(NOT|AND|OR)\b'
+      scope: keyword.operator.logical
+
+  constants:
+    - match: '\b(ALL|UNKNOWN|OK|INFO|WARNING|MINOR|MAJOR|CRITICAL|CLOSED|BLACKOUT|OPEN|TRUE|FALSE)\b'
+      scope: constant.language.mrl
+
+  keywords:
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(if|else|for|while|where|when|timer_info|using|updates|END|then)\b'
+      scope: keyword.control.mrl
+
+  rule_types:
+    - match: '\b(refine|filter|regulate|new|abstract|correlate|execute|threshold|propagate|timer|delete)\b'
+      scope: keyword.control.mrl
+
+  functions:
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(abs|acos|action_requestor|action_return|add_to_list|admin_execute|apply_match_entry|asin|atan|atan2|cellcontrol|cellinfo|char|class_path|code|concat|confirm_external|cos|decr|drop_new|execute|exp|find_match|find_match_entry|float|gcd|generate_event|get_env|get_external|get_list_slotvalues|has_substring|incr|int|int_to_hex|inttostring|kbversion|key_verify|key_version|len|listappend|listdelete|listdisjoint|listgetelt|listintersect|listlen|listmember|listremdup|listsubtract|listunion|listwalk|log|log10|lower|mapslots|match_regex|max|min|new_data|next|ntadd|ntcnt|ntget|ntset|opadd|opcnt|opget|opget_action|opget_args|opget_author|opget_time|opqry|opset|perform|pointertostring|pow|prev|propagated_to|random|real|realtostring|relate|rem_from_list|remove_data|reset_default|round|send_to|send_to_ext|set_list_slotvalues|set_timer|set_timer_at|sign|sin|smcomps|sprintf|sqrt|str_to_time_stamp|strextract|string|stringtoint|stringtopointer|stringtoreal|strip|strlen|strmatch|strnpart|strpart|strtolist|substring|tan|tf_active|tf_current_end|tf_current_interval|tf_current_start|tf_duration|tf_next_end|tf_next_interval|tf_next_start|tf_prev_end|tf_prev_interval|tf_prev_start|tf_udid_active|time_extract|time_stamp|time_stamp_to_cim|time_stamp_to_str|tolowercase|touppercase|trunc|unrelate|unset_cause|upper)\b'
+      scope: keyword.operator.mrl
+
+  numbers:
+    - match: '\b(-)?[0-9]+(\.[0-9])?\b'
+      scope: constant.numeric.mrl
+
+  strings:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character.
+    - match: '"'
+      scope: punctuation.definition.string.begin.mrl
+      push: inside_string
+
+  inside_string:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.mrl
+    # - match: '\.'
+      # scope: constant.character.escape.mrl
+    - match: '"'
+      scope: punctuation.definition.string.end.mrl
+      pop: true
+
+  strings2:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character.
+    - match: "'"
+      scope: punctuation.definition.string.begin.mrl
+      push: inside_string2
+
+  inside_string2:
+    - meta_include_prototype: false
+    - meta_scope: string.quoted.double.mrl
+    # - match: '\.'
+      # scope: constant.character.escape.mrl
+    - match: "'"
+      scope: punctuation.definition.string.end.mrl
+      pop: true
+
+  comments:
+    - match: '#'
+      scope: punctuation.definition.comment.mrl
+      push:
+        # This is an anonymous context push for brevity.
+        - meta_scope: comment.line.double-slash.mrl
+        - match: $\n?
+          pop: true
