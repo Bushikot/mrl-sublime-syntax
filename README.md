@@ -1,4 +1,4 @@
-# Master Rule Language syntax highliting
+# Master Rule Language syntax highlighting
 
 MRL is a compact, declarative language used to define rules and collectors for processing and organizing events in a cell. 
 Uncompiled rule and collector source files have a .mrl file extension.
